@@ -1,13 +1,34 @@
 #include <iostream>
 using std:: string;
 
-
-class Employee {
-public:
+class AbsrtactEmployee{
+    virtual void AskForPromotion()=0;
+};
+class Employee: AbsrtactEmployee {
+private:
     string Name;
     string Company;
     int Age;
-    
+public:
+    //encapsulation
+    void setName(string name){ //setter
+        Name = name;
+    }
+    string getName (){ // getter
+        return Name;
+    }
+    void setCompany(string company){ //setter
+        Company = company;
+    }
+    string getCompany (){ // getter
+        return Company;
+    }
+    void setAge(int age){ //setter
+        Age = age;
+    }
+    int getAge(){ // getter
+        return Age;
+    }
     
     void IntroduceYourself (){
         std::cout<< "Name - " << Name <<std::endl;
@@ -20,6 +41,12 @@ public:
         Company = company;
         Age = age;
     }
+    void AskForPromotion(){
+        if(Age>30)
+            std::cout<< Name <<" got promoted!"<<std::endl;
+        else
+            std::cout<< Name <<" , sorry NO promotion for you!"<<std::endl;
+    }
 };
 
 
@@ -30,11 +57,17 @@ int main() {
 //    employe1.Name = "Saldina";
 //    employe1.Company = "YT-CodeBeauty";
 //    employe1.Age = 25   ;
-    employe1.IntroduceYourself();
+//    employe1.IntroduceYourself();
     
     Employee employe2 = Employee("John", "Amazon", 35);
 //    employe1.Name = "Saldina";
 //    employe1.Company = "YT-CodeBeauty";
 //    employe1.Age = 25   ;
-    employe2.IntroduceYourself();
+//    employe2.IntroduceYourself();
+    
+//    employe1.setAge(39);
+//    std::cout<<employe1.getName()<<" is "<<employe1.getAge()<<" year old. "<<std::endl;
+    
+    employe1.AskForPromotion();
+    employe2.AskForPromotion();
 }
