@@ -48,7 +48,11 @@ public:
         else
             std::cout<< Name <<" , sorry NO promotion for you!"<<std::endl;
     }
+    virtual void work (){
+        std::cout<<Name<<" is cheking email, task backlogs, performing tasks... "<<std::endl;
+    }
 };
+
 
 class Developer:public Employee{
 public:
@@ -60,6 +64,9 @@ public:
     }
     void FixBug(){
         std::cout<< Name<< " fix bug using"<<  FavPogrammingLanguage<<std:: endl;
+    }
+    void work (){
+        std::cout<<Name<<" is writing"<<FavPogrammingLanguage<<"code."<<std::endl;
     }
 };
 
@@ -73,6 +80,9 @@ public:
     :Employee(name, company, age)
     {
         Subject = subject;
+    }
+    void work (){
+        std::cout<<Name<<" is teaching "<<Subject<<std::endl;
     }
     
 };
@@ -100,6 +110,13 @@ int main() {
     Teacher t = Teacher("Jack", "Cool School", 35, "History");
 //    d.FixBug();
 //    d.AskForPromotion();
-    t.PrepareLesson();
-    t.AskForPromotion();
+//    t.PrepareLesson();
+//    t.AskForPromotion();
+//      d.work();
+//      t.work();
+    Employee *e1 = &d;
+    Employee *e2 = &t;
+    e1->work();
+    e2->work();
+    
 }
