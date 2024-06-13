@@ -6,9 +6,10 @@ class AbsrtactEmployee{
 };
 class Employee: AbsrtactEmployee {
 private:
-    string Name;
     string Company;
     int Age;
+protected:
+    string Name;
 public:
     //encapsulation
     void setName(string name){ //setter
@@ -49,17 +50,42 @@ public:
     }
 };
 
+class Developer:public Employee{
+public:
+    string FavPogrammingLanguage;
+    Developer(string name, string company, int age, string favPogrammingLanguage)
+    : Employee(name, company, age)
+    {
+        FavPogrammingLanguage = favPogrammingLanguage;
+    }
+    void FixBug(){
+        std::cout<< Name<< " fix bug using"<<  FavPogrammingLanguage<<std:: endl;
+    }
+};
 
+class Teacher:public Employee {
+public:
+    string Subject;
+    void PrepareLesson (){
+        std::cout<<Name<< " is preparing " << Subject << " lesson."<<std::endl;
+    }
+    Teacher (string name, string company, int age, string subject)
+    :Employee(name, company, age)
+    {
+        Subject = subject;
+    }
+    
+};
 
 int main() {
     
-    Employee employe1 = Employee("Saldina", "YT-CodeBeauty", 25);
+//    Employee employe1 = Employee("Saldina", "YT-CodeBeauty", 25);
 //    employe1.Name = "Saldina";
 //    employe1.Company = "YT-CodeBeauty";
 //    employe1.Age = 25   ;
 //    employe1.IntroduceYourself();
     
-    Employee employe2 = Employee("John", "Amazon", 35);
+//    Employee employe2 = Employee("John", "Amazon", 35);
 //    employe1.Name = "Saldina";
 //    employe1.Company = "YT-CodeBeauty";
 //    employe1.Age = 25   ;
@@ -68,6 +94,12 @@ int main() {
 //    employe1.setAge(39);
 //    std::cout<<employe1.getName()<<" is "<<employe1.getAge()<<" year old. "<<std::endl;
     
-    employe1.AskForPromotion();
-    employe2.AskForPromotion();
+//    employe1.AskForPromotion();
+//    employe2.AskForPromotion();
+    Developer d = Developer("Saldina", "YT-CodeBeauty ", 25, " C++! ");
+    Teacher t = Teacher("Jack", "Cool School", 35, "History");
+//    d.FixBug();
+//    d.AskForPromotion();
+    t.PrepareLesson();
+    t.AskForPromotion();
 }
