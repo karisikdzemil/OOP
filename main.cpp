@@ -363,3 +363,66 @@
 //    student3.priakzi_podatke();
 //    return 0;
 //}
+
+//ZADATAK 3: Napraviti program koji simulira rad biblioteke
+
+#include <iostream>
+#include <vector>
+using std:: string;
+
+
+class Knjiga {
+private:
+    string Naslov;
+    string Autor;
+    int GodIzdanja;
+    bool Dostupna;
+public:
+    Knjiga(string naslov, string autor, int godIzdanja, bool dostupna)
+    :Naslov(naslov), Autor(autor), GodIzdanja(godIzdanja), Dostupna(dostupna)
+    {};
+    void PrikaziPodatke(){
+        std::cout<<"\nNaslov: "<<Naslov<<"\nAutor: "<<Autor<<"\nGodina Izdanja: "<<GodIzdanja<<std::endl;
+        if(Dostupna){
+            std::cout<< "Dostupna!"<<std::endl;
+        }else{
+            std::cout<< "Nije Dostupna!"<<std::endl;
+        }
+    }
+    void setDostupna (bool dostupna){
+        Dostupna=dostupna;
+    }
+    bool getDostupna(){
+        return Dostupna;
+    }
+    void PozajmiKnjigu(){
+        setDostupna(false);
+    }
+    void VratiKnjigu(){
+        setDostupna(true);
+    }
+    
+    class Clan {
+        string Ime;
+        int ClanskiBroj;
+        std:: vector <Knjiga*> PozajmljeneKnjige;
+        
+        Clan(string ime, int clanskiBroj)
+        :Ime(ime), ClanskiBroj(clanskiBroj)
+        {};
+        
+        void PrikaziPodatke(){
+            std::cout<<"Ime: "<<Ime<<"Clanski Broj: "<<ClanskiBroj<<std::endl;
+        }
+    };
+};
+
+int main () {
+    Knjiga knjiga1 = Knjiga{"Na Drini Cuprija", "Ivo Andric", 1967, true};
+    Knjiga knjiga2 = Knjiga{"Zlatni Pek", "Dzemil Karisik", 2009, true};
+    Knjiga knjiga3 = Knjiga{"Dervis I Smrt", "Mesa Selimovic", 1856, true};
+    
+  
+    
+    return 0;
+}
