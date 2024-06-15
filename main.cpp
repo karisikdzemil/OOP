@@ -314,5 +314,52 @@
 //    return 0;
 //}
 
+//ZADATAK 3 vezba sa dinmickim nizovima. Program koji upravlja studentima i njihovim indeksima
 
 
+//#include <iostream>
+//#include <vector>
+//using std::string;
+//
+//class Student {
+//private:
+//    string Ime;
+//    string Indeks;
+//    std::vector <string> kursevi;
+//public:
+//    
+//    Student(string ime, string indeks){
+//        Ime = ime;
+//        Indeks = indeks;
+//    }
+//    void DodajKurs(string kurs){
+//        kursevi.push_back(kurs);
+//    };
+//    void priakzi_podatke(){
+//        std::cout<<"\nIme- "<<Ime<<"\nIndeks- "<<Indeks<<std::endl;
+//        std::cout<< "Kursevi: \n";
+//        for(int i=0;i<kursevi.size();i++){
+//            std::cout<<kursevi[i]<<std::endl;
+//        }
+//    }
+//};
+//
+//int main (){
+//    Student student1 = Student("Djemsi", "002003");
+//    Student student2 = Student("Doe", "036007");
+//    Student student3 = Student("Beksa", "036221");
+//    
+//    student1.DodajKurs("osnovi racunarstva");
+//    student1.DodajKurs("osnovi programiranja");
+//    student1.DodajKurs("digitalna elektronika");
+//    student2.DodajKurs("matematicka analiza");
+//    student2.DodajKurs("Osnovi racunarstva");
+//    student2.DodajKurs("Algoritmi i Strukture Podataka");
+//    student3.DodajKurs("Linearna algebra");
+//    student3.DodajKurs("osnovi programiranja");
+//    student3.DodajKurs("Objektno Orjentisano Programiranje");
+//    student1.priakzi_podatke();
+//    student2.priakzi_podatke();
+//    student3.priakzi_podatke();
+//    return 0;
+//}
