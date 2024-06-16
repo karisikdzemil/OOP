@@ -389,40 +389,72 @@ public:
             std::cout<< "Nije Dostupna!"<<std::endl;
         }
     }
-    void setDostupna (bool dostupna){
-        Dostupna=dostupna;
-    }
-    bool getDostupna(){
-        return Dostupna;
-    }
+    string getNaslov(){return Naslov;};
+    bool jeDostupna(){return Dostupna;};
+    
+   
     void PozajmiKnjigu(){
-        setDostupna(false);
+        if(Dostupna){
+            Dostupna=false;
+        }else{
+            std::cout<<"Knjiga "<<Naslov<<" nije dostupna."<< std::endl;
+        }
     }
     void VratiKnjigu(){
-        setDostupna(true);
+        Dostupna = true;
     }
     
     class Clan {
+    private:
         string Ime;
         int ClanskiBroj;
         std:: vector <Knjiga*> PozajmljeneKnjige;
+    public:
         
         Clan(string ime, int clanskiBroj)
         :Ime(ime), ClanskiBroj(clanskiBroj)
         {};
         
+        int getClanskiBroj(){return ClanskiBroj;};
+        
         void PrikaziPodatke(){
             std::cout<<"Ime: "<<Ime<<"Clanski Broj: "<<ClanskiBroj<<std::endl;
+            std::cout<<"Poazajmljene Knjige: "<<std::endl;
+            for(Knjiga* knjiga : PozajmljeneKnjige){
+                knjiga->PrikaziPodatke();
+            }
+        }
+        void PozajmiKnjigu(Knjiga* knjiga){
+            if (knjiga->jeDostupna()){
+                knjiga->PozajmiKnjigu();
+                PozajmljeneKnjige.push_back(knjiga);
+                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je pozajmljena!"<<std::endl;
+            }else{
+                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" nije dostupna"<<std::endl;
+            }
+        };
+        void VratiKnjigu(Knjiga* knjiga){
+            for(auto it = PozajmljeneKnjige.begin();it != PozajmljeneKnjige.end();++it){
+                if(*it==knjiga){
+                    knjiga->VratiKnjigu();
+                    PozajmljeneKnjige.erase(it);
+                    std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je vracena!"<<std::endl;
+                    return;
+                }
+            }
+            std::cout<<"Knjiga "<<knjiga->getNaslov()<<"nije pronadjena u pozajmljenim knjigama."<<std::endl;
         }
     };
 };
 
 int main () {
-    Knjiga knjiga1 = Knjiga{"Na Drini Cuprija", "Ivo Andric", 1967, true};
-    Knjiga knjiga2 = Knjiga{"Zlatni Pek", "Dzemil Karisik", 2009, true};
-    Knjiga knjiga3 = Knjiga{"Dervis I Smrt", "Mesa Selimovic", 1856, true};
+    Knjiga* knjiga1 = new Knjiga{"Na Drini Cuprija", "Ivo Andric", 1967, true};
+    Knjiga* knjiga2 = new Knjiga{"Zlatni Pek", "Dzemil Karisik", 2009, true};
+    Knjiga* knjiga3 = new Knjiga{"Dervis I Smrt", "Mesa Selimovic", 1856, true};
     
-  
+    
+    
+    
     
     return 0;
 }
