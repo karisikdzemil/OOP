@@ -418,8 +418,8 @@ public:
         int getClanskiBroj(){return ClanskiBroj;};
         
         void PrikaziPodatke(){
-            std::cout<<"Ime: "<<Ime<<"Clanski Broj: "<<ClanskiBroj<<std::endl;
-            std::cout<<"Poazajmljene Knjige: "<<std::endl;
+            std::cout<<"\nIme: "<<Ime<<"\nClanski Broj: "<<ClanskiBroj<<std::endl;
+            std::cout<<"\nPoazajmljene Knjige: "<<std::endl;
             for(Knjiga* knjiga : PozajmljeneKnjige){
                 knjiga->PrikaziPodatke();
             }
@@ -428,9 +428,9 @@ public:
             if (knjiga->jeDostupna()){
                 knjiga->PozajmiKnjigu();
                 PozajmljeneKnjige.push_back(knjiga);
-                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je pozajmljena!"<<std::endl;
+                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je pozajmljena!\n"<<std::endl;
             }else{
-                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" nije dostupna"<<std::endl;
+                std::cout<<"Knjiga "<<knjiga->getNaslov()<<" nije dostupna\n"<<std::endl;
             }
         };
         void VratiKnjigu(Knjiga* knjiga){
@@ -438,11 +438,11 @@ public:
                 if(*it==knjiga){
                     knjiga->VratiKnjigu();
                     PozajmljeneKnjige.erase(it);
-                    std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je vracena!"<<std::endl;
+                    std::cout<<"Knjiga "<<knjiga->getNaslov()<<" je vracena!\n"<<std::endl;
                     return;
                 }
             }
-            std::cout<<"Knjiga "<<knjiga->getNaslov()<<"nije pronadjena u pozajmljenim knjigama."<<std::endl;
+            std::cout<<"Knjiga "<<knjiga->getNaslov()<<"nije pronadjena u pozajmljenim knjigama.\n"<<std::endl;
         }
     };
 };
@@ -451,10 +451,16 @@ int main () {
     Knjiga* knjiga1 = new Knjiga{"Na Drini Cuprija", "Ivo Andric", 1967, true};
     Knjiga* knjiga2 = new Knjiga{"Zlatni Pek", "Dzemil Karisik", 2009, true};
     Knjiga* knjiga3 = new Knjiga{"Dervis I Smrt", "Mesa Selimovic", 1856, true};
+    Knjiga:: Clan clan1 = Knjiga:: Clan("Fatih Lukarcanin", 20);
+    Knjiga:: Clan clan2 = Knjiga:: Clan("Dzemil Karisik", 70);
+    Knjiga:: Clan clan3 = Knjiga:: Clan("Edin Mavric", 53);
+    clan2.PozajmiKnjigu(knjiga3);
+    clan2.PozajmiKnjigu(knjiga1);
+    clan2.PrikaziPodatke();
     
     
     
     
-    
+
     return 0;
 }
