@@ -366,180 +366,280 @@
 
 //ZADATAK 3: Napraviti program koji simulira rad biblioteke
 
+//#include <iostream>
+//#include <vector>
+//#include <string>
+//using namespace std;
+//
+//class Knjiga {
+//private:
+//    string naslov;
+//    string autor;
+//    int godinaIzdanja;
+//    bool dostupna;
+//
+//public:
+//    Knjiga(string n, string a, int g)
+//        : naslov(n), autor(a), godinaIzdanja(g), dostupna(true) {}
+//
+//    string getNaslov() { return naslov; }
+//    bool jeDostupna() { return dostupna; }
+//
+//    void prikaziPodatke() {
+//        cout << "Naslov: " << naslov << ", Autor: " << autor
+//             << ", Godina izdanja: " << godinaIzdanja
+//             << ", Dostupna: " << (dostupna ? "Da" : "Ne") << endl;
+//    }
+//
+//    void pozajmiKnjigu() {
+//        if (dostupna) {
+//            dostupna = false;
+//        } else {
+//            cout << "Knjiga " << naslov << " nije dostupna za pozajmljivanje." << endl;
+//        }
+//    }
+//
+//    void vratiKnjigu() {
+//        dostupna = true;
+//    }
+//};
+//
+//class Clan {
+//private:
+//    string ime;
+//    int clanskiBroj;
+//    vector<Knjiga*> pozajmljeneKnjige;
+//
+//public:
+//    Clan(string i, int c)
+//        : ime(i), clanskiBroj(c) {}
+//
+//    int getClanskiBroj() { return clanskiBroj; }
+//
+//    void prikaziPodatke() {
+//        cout << "Ime: " << ime << ", Clanski broj: " << clanskiBroj << endl;
+//        cout << "Pozajmljene knjige:" << endl;
+//        for (Knjiga* knjiga : pozajmljeneKnjige) {
+//            knjiga->prikaziPodatke();
+//        }
+//    }
+//
+//    void pozajmiKnjigu(Knjiga* knjiga) {
+//        if (knjiga->jeDostupna()) {
+//            knjiga->pozajmiKnjigu();
+//            pozajmljeneKnjige.push_back(knjiga);
+//            cout << "Knjiga " << knjiga->getNaslov() << " je pozajmljena." << endl;
+//        } else {
+//            cout << "Knjiga " << knjiga->getNaslov() << " nije dostupna." << endl;
+//        }
+//    }
+//
+//    void vratiKnjigu(Knjiga* knjiga) {
+//        for (auto it = pozajmljeneKnjige.begin(); it != pozajmljeneKnjige.end(); ++it) {
+//            if (*it == knjiga) {
+//                knjiga->vratiKnjigu();
+//                pozajmljeneKnjige.erase(it);
+//                cout << "Knjiga " << knjiga->getNaslov() << " je vracena." << endl;
+//                return;
+//            }
+//        }
+//        cout << "Knjiga " << knjiga->getNaslov() << " nije pronadjena u pozajmljenim knjigama." << endl;
+//    }
+//};
+//
+//class Biblioteka {
+//private:
+//    vector<Knjiga> knjige;
+//    vector<Clan> clanovi;
+//
+//public:
+//    void dodajKnjigu(const Knjiga& knjiga) {
+//        knjige.push_back(knjiga);
+//    }
+//
+//    void dodajClana(const Clan& clan) {
+//        clanovi.push_back(clan);
+//    }
+//
+//    Knjiga* nadjiKnjigu(const string& naslov) {
+//        for (Knjiga& knjiga : knjige) {
+//            if (knjiga.getNaslov() == naslov) {
+//                return &knjiga;
+//            }
+//        }
+//        return nullptr;
+//    }
+//
+//    Clan* nadjiClana(int clanskiBroj) {
+//        for (Clan& clan : clanovi) {
+//            if (clan.getClanskiBroj() == clanskiBroj) {
+//                return &clan;
+//            }
+//        }
+//        return nullptr;
+//    }
+//
+//    void prikaziSveKnjige() {
+//        for (Knjiga& knjiga : knjige) {
+//            knjiga.prikaziPodatke();
+//        }
+//    }
+//
+//    void prikaziSveClanove() {
+//        for (Clan& clan : clanovi) {
+//            clan.prikaziPodatke();
+//        }
+//    }
+//};
+//
+//int main() {
+//    Biblioteka biblioteka;
+//    
+//    // Kreiranje knjiga
+//    Knjiga k1("Na Drini cuprija", "Ivo Andric", 1945);
+//    Knjiga k2("Seobe", "Milos Crnjanski", 1929);
+//    Knjiga k3("Prokleta avlija", "Ivo Andric", 1954);
+//    
+//    // Dodavanje knjiga u biblioteku
+//    biblioteka.dodajKnjigu(k1);
+//    biblioteka.dodajKnjigu(k2);
+//    biblioteka.dodajKnjigu(k3);
+//    
+//    // Kreiranje clanova
+//    Clan c1("Petar Petrovic", 101);
+//    Clan c2("Ana Anic", 102);
+//    
+//    // Dodavanje clanova u biblioteku
+//    biblioteka.dodajClana(c1);
+//    biblioteka.dodajClana(c2);
+//    
+//    // Prikazivanje svih knjiga
+//    cout << "Sve knjige u biblioteci:" << endl;
+//    biblioteka.prikaziSveKnjige();
+//    
+//    // Prikazivanje svih clanova
+//    cout << "\nSvi clanovi biblioteke:" << endl;
+//    biblioteka.prikaziSveClanove();
+//    
+//    // Pozajmljivanje knjige
+//    Knjiga* knjiga = biblioteka.nadjiKnjigu("Na Drini cuprija");
+//    Clan* clan = biblioteka.nadjiClana(101);
+//    if (knjiga && clan) {
+//        clan->pozajmiKnjigu(knjiga);
+//    }
+//    
+//    // Prikazivanje stanja nakon pozajmljivanja
+//    cout << "\nSvi clanovi biblioteke nakon pozajmljivanja:" << endl;
+//    biblioteka.prikaziSveClanove();
+//    
+//    // Vracanje knjige
+//    if (knjiga && clan) {
+//        clan->vratiKnjigu(knjiga);
+//    }
+//    
+//    // Prikazivanje stanja nakon vracanja
+//    cout << "\nSvi clanovi biblioteke nakon vracanja:" << endl;
+//    biblioteka.prikaziSveClanove();
+//    
+//    return 0;
+//}
+
+//EXERCISE/////////////////
+
+//#include <iostream>
+//#include <vector>
+//#include <string>
+//
+//using namespace std;
+//
+//class Stol{
+//private:
+//    string Model;
+//    int Cena;
+//    bool Dostupan;
+//public:
+//    Stol(string model, int cena, bool dostupan)
+//    : Model(model), Cena(cena), Dostupan(dostupan){};
+//    
+//    ~Stol(){
+////        std::cout<<"destruktor je pozvan"<<std::endl;
+//    }
+//    void PrikaziPodatke(){
+//        std::cout<<"Model: "<< Model<<"\nCena: "<<Cena<<std::endl;
+//        if(Dostupan){
+//            std::cout<<Model<<" stol je dostupan!"<<std::endl;
+//        }else{std::cout<<Model<<" stol nije dostupan!"<<std::endl;}
+//    }
+//    
+//    
+//
+//};
+//int main (){
+//    Stol stol1 ("Kucni", 17000, true);
+//    Stol stol2 ("Avlijski", 9000, false);
+//    stol2.PrikaziPodatke();
+//
+//    
+//    
+//    return 0;
+//}
+// Prethodni zadatak da se zavrsi...
+
+
+//ISPITNI ZADATAK////////////////////////////////////////////////////////////
+
+
+
 #include <iostream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
-class Knjiga {
+class Datum {
 private:
-    string naslov;
-    string autor;
-    int godinaIzdanja;
-    bool dostupna;
-
+    int Mesec;
+    int Godina;
 public:
-    Knjiga(string n, string a, int g)
-        : naslov(n), autor(a), godinaIzdanja(g), dostupna(true) {}
-
-    string getNaslov() { return naslov; }
-    bool jeDostupna() { return dostupna; }
-
-    void prikaziPodatke() {
-        cout << "Naslov: " << naslov << ", Autor: " << autor
-             << ", Godina izdanja: " << godinaIzdanja
-             << ", Dostupna: " << (dostupna ? "Da" : "Ne") << endl;
+    Datum (int mesec, int godina)
+    :Mesec(mesec), Godina(godina){
+        if(mesec<1||mesec>12){
+            cout<<"Mesec mora biti od 1 do 12\n";
+        }
+    };
+    
+    ~Datum(){
+//        cout<<"destruktor pozvan\n";
     }
-
-    void pozajmiKnjigu() {
-        if (dostupna) {
-            dostupna = false;
-        } else {
-            cout << "Knjiga " << naslov << " nije dostupna za pozajmljivanje." << endl;
+    void setMesec(int mesec){
+        Mesec = mesec;
+    };
+    int getMesec(){
+        return Mesec;
+    }
+    void setGodina(int godina){
+        Godina=godina;
+    }
+    int getGodina(){
+        return Godina;
+    }
+    void JednakostDatuma(Datum datum1, Datum datum2){
+        if (datum1.Mesec==datum2.Mesec&&datum1.Godina==datum2.Godina){
+            cout<<"Datumi su jednaki!\n";
+        }else{
+            cout<<"Datumi nisu jednaki!\n";
         }
     }
-
-    void vratiKnjigu() {
-        dostupna = true;
+    void PrikaziDatum(){
+        cout<<"Mesec/Godina:"<<Mesec<<"."<<Godina<<endl;
     }
 };
-
-class Clan {
-private:
-    string ime;
-    int clanskiBroj;
-    vector<Knjiga*> pozajmljeneKnjige;
-
-public:
-    Clan(string i, int c)
-        : ime(i), clanskiBroj(c) {}
-
-    int getClanskiBroj() { return clanskiBroj; }
-
-    void prikaziPodatke() {
-        cout << "Ime: " << ime << ", Clanski broj: " << clanskiBroj << endl;
-        cout << "Pozajmljene knjige:" << endl;
-        for (Knjiga* knjiga : pozajmljeneKnjige) {
-            knjiga->prikaziPodatke();
-        }
-    }
-
-    void pozajmiKnjigu(Knjiga* knjiga) {
-        if (knjiga->jeDostupna()) {
-            knjiga->pozajmiKnjigu();
-            pozajmljeneKnjige.push_back(knjiga);
-            cout << "Knjiga " << knjiga->getNaslov() << " je pozajmljena." << endl;
-        } else {
-            cout << "Knjiga " << knjiga->getNaslov() << " nije dostupna." << endl;
-        }
-    }
-
-    void vratiKnjigu(Knjiga* knjiga) {
-        for (auto it = pozajmljeneKnjige.begin(); it != pozajmljeneKnjige.end(); ++it) {
-            if (*it == knjiga) {
-                knjiga->vratiKnjigu();
-                pozajmljeneKnjige.erase(it);
-                cout << "Knjiga " << knjiga->getNaslov() << " je vracena." << endl;
-                return;
-            }
-        }
-        cout << "Knjiga " << knjiga->getNaslov() << " nije pronadjena u pozajmljenim knjigama." << endl;
-    }
-};
-
-class Biblioteka {
-private:
-    vector<Knjiga> knjige;
-    vector<Clan> clanovi;
-
-public:
-    void dodajKnjigu(const Knjiga& knjiga) {
-        knjige.push_back(knjiga);
-    }
-
-    void dodajClana(const Clan& clan) {
-        clanovi.push_back(clan);
-    }
-
-    Knjiga* nadjiKnjigu(const string& naslov) {
-        for (Knjiga& knjiga : knjige) {
-            if (knjiga.getNaslov() == naslov) {
-                return &knjiga;
-            }
-        }
-        return nullptr;
-    }
-
-    Clan* nadjiClana(int clanskiBroj) {
-        for (Clan& clan : clanovi) {
-            if (clan.getClanskiBroj() == clanskiBroj) {
-                return &clan;
-            }
-        }
-        return nullptr;
-    }
-
-    void prikaziSveKnjige() {
-        for (Knjiga& knjiga : knjige) {
-            knjiga.prikaziPodatke();
-        }
-    }
-
-    void prikaziSveClanove() {
-        for (Clan& clan : clanovi) {
-            clan.prikaziPodatke();
-        }
-    }
-};
-
-int main() {
-    Biblioteka biblioteka;
-    
-    // Kreiranje knjiga
-    Knjiga k1("Na Drini cuprija", "Ivo Andric", 1945);
-    Knjiga k2("Seobe", "Milos Crnjanski", 1929);
-    Knjiga k3("Prokleta avlija", "Ivo Andric", 1954);
-    
-    // Dodavanje knjiga u biblioteku
-    biblioteka.dodajKnjigu(k1);
-    biblioteka.dodajKnjigu(k2);
-    biblioteka.dodajKnjigu(k3);
-    
-    // Kreiranje clanova
-    Clan c1("Petar Petrovic", 101);
-    Clan c2("Ana Anic", 102);
-    
-    // Dodavanje clanova u biblioteku
-    biblioteka.dodajClana(c1);
-    biblioteka.dodajClana(c2);
-    
-    // Prikazivanje svih knjiga
-    cout << "Sve knjige u biblioteci:" << endl;
-    biblioteka.prikaziSveKnjige();
-    
-    // Prikazivanje svih clanova
-    cout << "\nSvi clanovi biblioteke:" << endl;
-    biblioteka.prikaziSveClanove();
-    
-    // Pozajmljivanje knjige
-    Knjiga* knjiga = biblioteka.nadjiKnjigu("Na Drini cuprija");
-    Clan* clan = biblioteka.nadjiClana(101);
-    if (knjiga && clan) {
-        clan->pozajmiKnjigu(knjiga);
-    }
-    
-    // Prikazivanje stanja nakon pozajmljivanja
-    cout << "\nSvi clanovi biblioteke nakon pozajmljivanja:" << endl;
-    biblioteka.prikaziSveClanove();
-    
-    // Vracanje knjige
-    if (knjiga && clan) {
-        clan->vratiKnjigu(knjiga);
-    }
-    
-    // Prikazivanje stanja nakon vracanja
-    cout << "\nSvi clanovi biblioteke nakon vracanja:" << endl;
-    biblioteka.prikaziSveClanove();
-    
+int main (){
+    Datum datum1 = Datum(3, 2023);
+    Datum datum2 = Datum(5, 2023);
+    Datum datum3 = Datum(3, 2023);
+    datum1.JednakostDatuma(datum1, datum3);
+    datum1.PrikaziDatum();
     return 0;
 }
+
