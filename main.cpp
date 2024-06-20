@@ -665,40 +665,181 @@
 
 #include <iostream>
 #include <string>
-
 using namespace std;
 
-class Datum{
+class Datum {
 public:
-    Datum(int god, int mes):God(god), Mes(mes){};
-    int dohMes()const{return Mes;} int dohGod()const{return God;}
-    
-    friend bool operator == (const Datum &d1, const Datum &d2){
-        return d1.God==d2.God&&d1.Mes==d2.Mes;
+    Datum(int god, int mes) : God(god), Mes(mes) {};
+    int dohMes() const { return Mes; }
+    int dohGod() const { return God; }
+
+    friend bool operator==(const Datum &d1, const Datum &d2) {
+        return d1.God == d2.God && d1.Mes == d2.Mes;
     }
-    friend bool operator !=(const Datum &d1, const Datum &d2){
-        return !(d1==d2);
+    friend bool operator!=(const Datum &d1, const Datum &d2) {
+        return !(d1 == d2);
     }
-    friend ostream &operator<<(ostream &os, const Datum &d)
-    {os<<d.Mes<<"/"<<d.God; return os;}
+    friend ostream &operator<<(ostream &os, const Datum &d) {
+        os << d.Mes << "/" << d.God;
+        return os;
+    }
+
 private:
     int God, Mes;
-    
-    class Karta{
-        double iznos;
-    public:
-        Karta() = default;
-        virtual ~Karta(){};
-        virtual bool validiraj (double iznos,const Datum &d)=0;
-        friend ostream &operator<<(ostream &os, const Karta &k)
-        {k.pisi(os);  return os;}
-        void operator = (const Karta&) = delete;
-        void operator = (Karta&&) = delete;
-    protected:
-        void pisi(ostream &os){
-            os<<id;	
-        }
-        
-    };
 };
 
+class Karta {
+public:
+    Karta() : id(++posId) {}
+    virtual ~Karta() {}
+    virtual bool validiraj(double iznos, const Datum &d) = 0;
+    friend ostream &operator<<(ostream &os, const Karta &k) {
+        k.pisi(os);
+        return os;
+    }
+    Karta(const Karta &) = delete;
+    Karta &operator=(const Karta &) = delete;
+
+protected:
+    virtual void pisi(ostream &os) const { os << id; }
+
+private:
+    static int posId;
+    int id;
+};
+
+int Karta::posId = 0;
+
+class Mesecna : public Karta {
+public:
+    Mesecna(string ime, int god, int mes) : Ime(ime), God(god), Mes(mes) {}
+    void Produzi(int god, int mes) {
+        God = god;
+        Mes = mes;
+    }
+    bool validiraj(double iznos, const Datum &d) override {
+        return Datum(God, Mes) == d;
+    }
+
+private:
+    void pisi(ostream &os) const override {
+        os << Ime << "(";
+        Karta::pisi(os);
+        os << ")" << God << "/" << Mes;
+    }
+    string Ime;
+    int Mes, God;
+};
+
+class Pojedinacna : public Karta {
+public:
+    Pojedinacna(double i = 50) { dopuna(i); }
+    double dopuna(double i) {
+        iznos += i;
+        return iznos;
+    }
+    bool validiraj(double i, const Datum &d) override {
+        if (i > iznos) return false;
+        iznos -= i;
+        return true;
+    }
+
+private:
+    void pisi(ostream &os) const override {
+        os << iznos << '(';
+        Karta::pisi(os);
+        os << ')';
+    }
+    double iznos = 0;
+};
+
+
+class GPuna {};
+ostream &operator<<(ostream &os, const GPuna &) {
+    return os << "Zbirka prepunjena!";
+}
+
+class GPrazna {};
+ostream &operator<<(ostream &os, const GPrazna &) {
+    return os << "Van opsega!";
+}
+
+template <typename T, int K>
+class Zbirka {
+public:
+    Zbirka() { isprazni(); }
+    Zbirka &operator<<(T *t) {
+        if (pop == K) throw GPuna();
+        mesta[posl] = t;
+        pop++;
+        posl = (posl + 1) % K;
+        return *this;
+    }
+    void isprazni() {
+        prvi = posl = pop = 0;
+    }
+    Zbirka &operator>>(T *&t) {
+        if (pop == 0) throw GPrazna();
+        t = mesta[prvi];
+        prvi = (prvi + 1) % K;
+        pop--;
+        return *this;
+    }
+    int zauzeto() const { return pop; }
+
+private:
+    T *mesta[K];
+    int pop, prvi, posl;
+};
+
+template <int K = 10>
+class Aparat {
+public:
+    Aparat() = default;
+    Aparat(const Aparat &) = delete;
+    Aparat(Aparat &&) = delete;
+    void operator=(const Aparat &) = delete;
+    void operator=(Aparat &&) = delete;
+    Aparat &operator+=(Karta *k) {
+        karte << k;
+        return *this;
+    }
+    void testiraj(double iznos, const Datum &d);
+
+private:
+    Zbirka<Karta, K> karte;
+};
+
+template <int K>
+void Aparat<K>::testiraj(double iznos, const Datum &d) {
+    while (karte.zauzeto() > 0) {
+        Karta *k;
+        karte >> k;
+        bool val = k->validiraj(iznos, d);
+        cout << "Karta " << *k << " ";
+        if (!val)
+            cout << "nije valjana.";
+        else
+            cout << "valjana.";
+        cout << endl;
+    }
+}
+
+int main() {
+    try {
+        Aparat<> a;
+        Mesecna m1("Marko", 2015, 1);
+        Mesecna m2("Petar", 2014, 12);
+        Pojedinacna p1(100), p2;
+        a += &m1;
+        a += &m2;
+        a += &p1;
+        a += &p2;
+        a.testiraj(75, Datum(2015, 1));
+    } catch (GPuna &g) {
+        cout << g << endl;
+    } catch (GPrazna &g) {
+        cout << g << endl;
+    }
+    return 0;
+}
