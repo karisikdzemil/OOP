@@ -590,56 +590,115 @@
 
 
 
+//#include <iostream>
+//#include <vector>
+//#include <string>
+//
+//using namespace std;
+//
+//class Datum {
+//private:
+//    int Mesec;
+//    int Godina;
+//public:
+//    Datum (int mesec, int godina)
+//    :Mesec(mesec), Godina(godina){
+//        if(mesec<1||mesec>12){
+//            cout<<"Mesec mora biti od 1 do 12\n";
+//        }
+//    };
+//    
+//    ~Datum(){
+//        //        cout<<"destruktor pozvan\n";
+//    }
+//    void setMesec(int mesec){
+//        Mesec = mesec;
+//    };
+//    int getMesec(){
+//        return Mesec;
+//    }
+//    void setGodina(int godina){
+//        Godina=godina;
+//    }
+//    int getGodina(){
+//        return Godina;
+//    }
+//    void JednakostDatuma(Datum datum1, Datum datum2){
+//        if (datum1.Mesec==datum2.Mesec&&datum1.Godina==datum2.Godina){
+//            cout<<"Datumi su jednaki!\n";
+//        }else{
+//            cout<<"Datumi nisu jednaki!\n";
+//        }
+//    }
+//    void PrikaziDatum(){
+//        cout<<"Mesec/Godina:"<<Mesec<<"."<<Godina<<endl;
+//    }
+//    class Karta{
+//    private:
+//        static int GlobalId;
+//        int Id;
+//        Karta(const Karta&) = delete;
+//        Karta& operator=(const Karta&) = delete;
+//    public:
+//        Karta():Id(GlobalId){};
+//        ~Karta(){};
+//        
+//        int getId (){
+//            return Id;
+//        }
+//        virtual bool ProveriValjanost(double CenaVoznje, const Datum& datum) const = 0;
+//        
+//        
+//    };
+//    
+//    int main (){
+//        Datum datum1 = Datum(3, 2023);
+//        Datum datum2 = Datum(5, 2023);
+//        Datum datum3 = Datum(3, 2023);
+//        datum1.JednakostDatuma(datum1, datum3);
+//        datum1.PrikaziDatum();
+//        return 0;
+//    };
+//FAIL//////
+
+//ISPITNI ZADATAK////////////////////////////////////////////////
+
 #include <iostream>
-#include <vector>
 #include <string>
 
 using namespace std;
 
-class Datum {
-private:
-    int Mesec;
-    int Godina;
+class Datum{
 public:
-    Datum (int mesec, int godina)
-    :Mesec(mesec), Godina(godina){
-        if(mesec<1||mesec>12){
-            cout<<"Mesec mora biti od 1 do 12\n";
-        }
-    };
+    Datum(int god, int mes):God(god), Mes(mes){};
+    int dohMes()const{return Mes;} int dohGod()const{return God;}
     
-    ~Datum(){
-//        cout<<"destruktor pozvan\n";
+    friend bool operator == (const Datum &d1, const Datum &d2){
+        return d1.God==d2.God&&d1.Mes==d2.Mes;
     }
-    void setMesec(int mesec){
-        Mesec = mesec;
-    };
-    int getMesec(){
-        return Mesec;
+    friend bool operator !=(const Datum &d1, const Datum &d2){
+        return !(d1==d2);
     }
-    void setGodina(int godina){
-        Godina=godina;
-    }
-    int getGodina(){
-        return Godina;
-    }
-    void JednakostDatuma(Datum datum1, Datum datum2){
-        if (datum1.Mesec==datum2.Mesec&&datum1.Godina==datum2.Godina){
-            cout<<"Datumi su jednaki!\n";
-        }else{
-            cout<<"Datumi nisu jednaki!\n";
+    friend ostream &operator<<(ostream &os, const Datum &d)
+    {os<<d.Mes<<"/"<<d.God; return os;}
+private:
+    int God, Mes;
+    
+    class Karta{
+        double iznos;
+    public:
+        Karta() = default;
+        virtual ~Karta(){};
+        virtual bool validiraj (double iznos,const Datum &d)=0;
+        friend ostream &operator<<(ostream &os, const Karta &k)
+        {k.pisi(os);  return os;}
+        void operator = (const Karta&) = delete;
+        void operator = (Karta&&) = delete;
+    protected:
+        void pisi(ostream &os){
+            os<<id;	
         }
-    }
-    void PrikaziDatum(){
-        cout<<"Mesec/Godina:"<<Mesec<<"."<<Godina<<endl;
-    }
+        
+    };
 };
-int main (){
-    Datum datum1 = Datum(3, 2023);
-    Datum datum2 = Datum(5, 2023);
-    Datum datum3 = Datum(3, 2023);
-    datum1.JednakostDatuma(datum1, datum3);
-    datum1.PrikaziDatum();
-    return 0;
-}
 
