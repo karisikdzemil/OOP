@@ -663,183 +663,366 @@
 
 //ISPITNI ZADATAK////////////////////////////////////////////////
 
+//#include <iostream>
+//#include <string>
+//using namespace std;
+//
+//class Datum {
+//public:
+//    Datum(int god, int mes) : God(god), Mes(mes) {};
+//    int dohMes() const { return Mes; }
+//    int dohGod() const { return God; }
+//
+//    friend bool operator==(const Datum &d1, const Datum &d2) {
+//        return d1.God == d2.God && d1.Mes == d2.Mes;
+//    }
+//    friend bool operator!=(const Datum &d1, const Datum &d2) {
+//        return !(d1 == d2);
+//    }
+//    friend ostream &operator<<(ostream &os, const Datum &d) {
+//        os << d.Mes << "/" << d.God;
+//        return os;
+//    }
+//
+//private:
+//    int God, Mes;
+//};
+//
+//class Karta {
+//public:
+//    Karta() : id(++posId) {}
+//    virtual ~Karta() {}
+//    virtual bool validiraj(double iznos, const Datum &d) = 0;
+//    friend ostream &operator<<(ostream &os, const Karta &k) {
+//        k.pisi(os);
+//        return os;
+//    }
+//    Karta(const Karta &) = delete;
+//    Karta &operator=(const Karta &) = delete;
+//
+//protected:
+//    virtual void pisi(ostream &os) const { os << id; }
+//
+//private:
+//    static int posId;
+//    int id;
+//};
+//
+//int Karta::posId = 0;
+//
+//class Mesecna : public Karta {
+//public:
+//    Mesecna(string ime, int god, int mes) : Ime(ime), God(god), Mes(mes) {}
+//    void Produzi(int god, int mes) {
+//        God = god;
+//        Mes = mes;
+//    }
+//    bool validiraj(double iznos, const Datum &d) override {
+//        return Datum(God, Mes) == d;
+//    }
+//
+//private:
+//    void pisi(ostream &os) const override {
+//        os << Ime << "(";
+//        Karta::pisi(os);
+//        os << ")" << God << "/" << Mes;
+//    }
+//    string Ime;
+//    int Mes, God;
+//};
+//
+//class Pojedinacna : public Karta {
+//public:
+//    Pojedinacna(double i = 50) { dopuna(i); }
+//    double dopuna(double i) {
+//        iznos += i;
+//        return iznos;
+//    }
+//    bool validiraj(double i, const Datum &d) override {
+//        if (i > iznos) return false;
+//        iznos -= i;
+//        return true;
+//    }
+//
+//private:
+//    void pisi(ostream &os) const override {
+//        os << iznos << '(';
+//        Karta::pisi(os);
+//        os << ')';
+//    }
+//    double iznos = 0;
+//};
+//
+//
+//class GPuna {};
+//ostream &operator<<(ostream &os, const GPuna &) {
+//    return os << "Zbirka prepunjena!";
+//}
+//
+//class GPrazna {};
+//ostream &operator<<(ostream &os, const GPrazna &) {
+//    return os << "Van opsega!";
+//}
+//
+//template <typename T, int K>
+//class Zbirka {
+//public:
+//    Zbirka() { isprazni(); }
+//    Zbirka &operator<<(T *t) {
+//        if (pop == K) throw GPuna();
+//        mesta[posl] = t;
+//        pop++;
+//        posl = (posl + 1) % K;
+//        return *this;
+//    }
+//    void isprazni() {
+//        prvi = posl = pop = 0;
+//    }
+//    Zbirka &operator>>(T *&t) {
+//        if (pop == 0) throw GPrazna();
+//        t = mesta[prvi];
+//        prvi = (prvi + 1) % K;
+//        pop--;
+//        return *this;
+//    }
+//    int zauzeto() const { return pop; }
+//
+//private:
+//    T *mesta[K];
+//    int pop, prvi, posl;
+//};
+//
+//template <int K = 10>
+//class Aparat {
+//public:
+//    Aparat() = default;
+//    Aparat(const Aparat &) = delete;
+//    Aparat(Aparat &&) = delete;
+//    void operator=(const Aparat &) = delete;
+//    void operator=(Aparat &&) = delete;
+//    Aparat &operator+=(Karta *k) {
+//        karte << k;
+//        return *this;
+//    }
+//    void testiraj(double iznos, const Datum &d);
+//
+//private:
+//    Zbirka<Karta, K> karte;
+//};
+//
+//template <int K>
+//void Aparat<K>::testiraj(double iznos, const Datum &d) {
+//    while (karte.zauzeto() > 0) {
+//        Karta *k;
+//        karte >> k;
+//        bool val = k->validiraj(iznos, d);
+//        cout << "Karta " << *k << " ";
+//        if (!val)
+//            cout << "nije valjana.";
+//        else
+//            cout << "valjana.";
+//        cout << endl;
+//    }
+//}
+//
+//int main() {
+//    try {
+//        Aparat<> a;
+//        Mesecna m1("Marko", 2015, 1);
+//        Mesecna m2("Petar", 2014, 12);
+//        Pojedinacna p1(100), p2;
+//        a += &m1;
+//        a += &m2;
+//        a += &p1;
+//        a += &p2;
+//        a.testiraj(75, Datum(2015, 1));
+//    } catch (GPuna &g) {
+//        cout << g << endl;
+//    } catch (GPrazna &g) {
+//        cout << g << endl;
+//    }
+//    return 0;
+//}
+
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
+#include <stdexcept>
+
 using namespace std;
 
-class Datum {
+class Osoba {
 public:
-    Datum(int god, int mes) : God(god), Mes(mes) {};
-    int dohMes() const { return Mes; }
-    int dohGod() const { return God; }
+    Osoba(const string& ime, const string& prezime)
+        : ime(ime), prezime(prezime) {}
+    virtual ~Osoba() {}
 
-    friend bool operator==(const Datum &d1, const Datum &d2) {
-        return d1.God == d2.God && d1.Mes == d2.Mes;
-    }
-    friend bool operator!=(const Datum &d1, const Datum &d2) {
-        return !(d1 == d2);
-    }
-    friend ostream &operator<<(ostream &os, const Datum &d) {
-        os << d.Mes << "/" << d.God;
+    string getIme() const { return ime; }
+    string getPrezime() const { return prezime; }
+
+    friend ostream& operator<<(ostream& os, const Osoba& o) {
+        os << o.ime << " " << o.prezime;
         return os;
     }
 
 private:
-    int God, Mes;
+    string ime;
+    string prezime;
 };
 
-class Karta {
+class Student : public Osoba {
 public:
-    Karta() : id(++posId) {}
-    virtual ~Karta() {}
-    virtual bool validiraj(double iznos, const Datum &d) = 0;
-    friend ostream &operator<<(ostream &os, const Karta &k) {
-        k.pisi(os);
-        return os;
-    }
-    Karta(const Karta &) = delete;
-    Karta &operator=(const Karta &) = delete;
+    Student(const string& ime, const string& prezime, int brIndeksa)
+        : Osoba(ime, prezime), brIndeksa(brIndeksa) {}
 
-protected:
-    virtual void pisi(ostream &os) const { os << id; }
+    int getBrIndeksa() const { return brIndeksa; }
 
 private:
-    static int posId;
-    int id;
+    int brIndeksa;
 };
 
-int Karta::posId = 0;
-
-class Mesecna : public Karta {
+class Profesor : public Osoba {
 public:
-    Mesecna(string ime, int god, int mes) : Ime(ime), God(god), Mes(mes) {}
-    void Produzi(int god, int mes) {
-        God = god;
-        Mes = mes;
+    Profesor(const string& ime, const string& prezime, const string& titula)
+        : Osoba(ime, prezime), titula(titula) {}
+
+    string getTitula() const { return titula; }
+
+private:
+    string titula;
+};
+
+
+class Kurs {
+public:
+    Kurs(const string& naziv, Profesor* profesor)
+        : naziv(naziv), profesor(profesor) {}
+
+    string getNaziv() const { return naziv; }
+    Profesor* getProfesor() const { return profesor; }
+
+    void dodajStudenta(Student* student) {
+        studenti.push_back(student);
     }
-    bool validiraj(double iznos, const Datum &d) override {
-        return Datum(God, Mes) == d;
+
+    const vector<Student*>& getStudenti() const { return studenti; }
+
+private:
+    string naziv;
+    Profesor* profesor;
+    vector<Student*> studenti;
+};
+
+
+class Univerzitet {
+public:
+    void dodajStudenta(const Student& student) {
+        if (studenti.find(student.getBrIndeksa()) != studenti.end()) {
+            throw runtime_error("Student vec postoji.");
+        }
+        studenti[student.getBrIndeksa()] = student;
+    }
+
+    void dodajProfesora(const Profesor& profesor) {
+        profesori.push_back(profesor);
+    }
+
+    void dodajKurs(const Kurs& kurs) {
+        kursevi.push_back(kurs);
+    }
+
+    Student& nadjiStudenta(int brIndeksa) {
+        if (studenti.find(brIndeksa) == studenti.end()) {
+            throw runtime_error("Student nije pronadjen.");
+        }
+        return studenti[brIndeksa];
+    }
+
+    Profesor& nadjiProfesora(const string& ime, const string& prezime) {
+        for (Profesor& profesor : profesori) {
+            if (profesor.getIme() == ime && profesor.getPrezime() == prezime) {
+                return profesor;
+            }
+        }
+        throw runtime_error("Profesor nije pronadjen.");
+    }
+
+    Kurs& nadjiKurs(const string& naziv) {
+        for (Kurs& kurs : kursevi) {
+            if (kurs.getNaziv() == naziv) {
+                return kurs;
+            }
+        }
+        throw runtime_error("Kurs nije pronadjen.");
+    }
+
+    void prikaziStudente() const {
+        for (const auto& par : studenti) {
+            cout << par.second << endl;
+        }
+    }
+
+    void prikaziProfesore() const {
+        for (const Profesor& profesor : profesori) {
+            cout << profesor << endl;
+        }
+    }
+
+    void prikaziKurseve() const {
+        for (const Kurs& kurs : kursevi) {
+            cout << "Kurs: " << kurs.getNaziv() << ", Profesor: " << *kurs.getProfesor() << endl;
+            cout << "Studenti:" << endl;
+            for (Student* student : kurs.getStudenti()) {
+                cout << " - " << *student << endl;
+            }
+        }
     }
 
 private:
-    void pisi(ostream &os) const override {
-        os << Ime << "(";
-        Karta::pisi(os);
-        os << ")" << God << "/" << Mes;
-    }
-    string Ime;
-    int Mes, God;
+    map<int, Student> studenti;
+    vector<Profesor> profesori;
+    vector<Kurs> kursevi;
 };
-
-class Pojedinacna : public Karta {
-public:
-    Pojedinacna(double i = 50) { dopuna(i); }
-    double dopuna(double i) {
-        iznos += i;
-        return iznos;
-    }
-    bool validiraj(double i, const Datum &d) override {
-        if (i > iznos) return false;
-        iznos -= i;
-        return true;
-    }
-
-private:
-    void pisi(ostream &os) const override {
-        os << iznos << '(';
-        Karta::pisi(os);
-        os << ')';
-    }
-    double iznos = 0;
-};
-
-
-class GPuna {};
-ostream &operator<<(ostream &os, const GPuna &) {
-    return os << "Zbirka prepunjena!";
-}
-
-class GPrazna {};
-ostream &operator<<(ostream &os, const GPrazna &) {
-    return os << "Van opsega!";
-}
-
-template <typename T, int K>
-class Zbirka {
-public:
-    Zbirka() { isprazni(); }
-    Zbirka &operator<<(T *t) {
-        if (pop == K) throw GPuna();
-        mesta[posl] = t;
-        pop++;
-        posl = (posl + 1) % K;
-        return *this;
-    }
-    void isprazni() {
-        prvi = posl = pop = 0;
-    }
-    Zbirka &operator>>(T *&t) {
-        if (pop == 0) throw GPrazna();
-        t = mesta[prvi];
-        prvi = (prvi + 1) % K;
-        pop--;
-        return *this;
-    }
-    int zauzeto() const { return pop; }
-
-private:
-    T *mesta[K];
-    int pop, prvi, posl;
-};
-
-template <int K = 10>
-class Aparat {
-public:
-    Aparat() = default;
-    Aparat(const Aparat &) = delete;
-    Aparat(Aparat &&) = delete;
-    void operator=(const Aparat &) = delete;
-    void operator=(Aparat &&) = delete;
-    Aparat &operator+=(Karta *k) {
-        karte << k;
-        return *this;
-    }
-    void testiraj(double iznos, const Datum &d);
-
-private:
-    Zbirka<Karta, K> karte;
-};
-
-template <int K>
-void Aparat<K>::testiraj(double iznos, const Datum &d) {
-    while (karte.zauzeto() > 0) {
-        Karta *k;
-        karte >> k;
-        bool val = k->validiraj(iznos, d);
-        cout << "Karta " << *k << " ";
-        if (!val)
-            cout << "nije valjana.";
-        else
-            cout << "valjana.";
-        cout << endl;
-    }
-}
 
 int main() {
     try {
-        Aparat<> a;
-        Mesecna m1("Marko", 2015, 1);
-        Mesecna m2("Petar", 2014, 12);
-        Pojedinacna p1(100), p2;
-        a += &m1;
-        a += &m2;
-        a += &p1;
-        a += &p2;
-        a.testiraj(75, Datum(2015, 1));
-    } catch (GPuna &g) {
-        cout << g << endl;
-    } catch (GPrazna &g) {
-        cout << g << endl;
+        Univerzitet univerzitet;
+
+        Profesor prof1("Marko", "Markovic", "Dr");
+        Profesor prof2("Ana", "Anic", "Mr");
+
+        univerzitet.dodajProfesora(prof1);
+        univerzitet.dodajProfesora(prof2);
+
+        Student stud1("Ivan", "Ivic", 123);
+        Student stud2("Petar", "Petrovic", 124);
+
+        univerzitet.dodajStudenta(stud1);
+        univerzitet.dodajStudenta(stud2);
+
+        Kurs kurs1("Matematika", &prof1);
+        Kurs kurs2("Fizika", &prof2);
+
+        kurs1.dodajStudenta(&stud1);
+        kurs2.dodajStudenta(&stud2);
+
+        univerzitet.dodajKurs(kurs1);
+        univerzitet.dodajKurs(kurs2);
+
+        cout << "Studenti:" << endl;
+        univerzitet.prikaziStudente();
+        cout << endl;
+
+        cout << "Profesori:" << endl;
+        univerzitet.prikaziProfesore();
+        cout << endl;
+
+        cout << "Kursevi:" << endl;
+        univerzitet.prikaziKurseve();
+    } catch (const runtime_error& e) {
+        cout << "Greska: " << e.what() << endl;
     }
+
     return 0;
 }
