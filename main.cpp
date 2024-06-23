@@ -844,185 +844,237 @@
 //    return 0;
 //}
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <stdexcept>
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//#include <map>
+//#include <stdexcept>
+//
+//using namespace std;
+//
+//class Osoba {
+//public:
+//    Osoba(const string& ime, const string& prezime)
+//        : ime(ime), prezime(prezime) {}
+//    virtual ~Osoba() {}
+//
+//    string getIme() const { return ime; }
+//    string getPrezime() const { return prezime; }
+//
+//    friend ostream& operator<<(ostream& os, const Osoba& o) {
+//        os << o.ime << " " << o.prezime;
+//        return os;
+//    }
+//
+//private:
+//    string ime;
+//    string prezime;
+//};
+//
+//class Student : public Osoba {
+//public:
+//    Student(const string& ime, const string& prezime, int brIndeksa)
+//        : Osoba(ime, prezime), brIndeksa(brIndeksa) {}
+//
+//    int getBrIndeksa() const { return brIndeksa; }
+//
+//private:
+//    int brIndeksa;
+//};
+//
+//class Profesor : public Osoba {
+//public:
+//    Profesor(const string& ime, const string& prezime, const string& titula)
+//        : Osoba(ime, prezime), titula(titula) {}
+//
+//    string getTitula() const { return titula; }
+//
+//private:
+//    string titula;
+//};
+//
+//
+//class Kurs {
+//public:
+//    Kurs(const string& naziv, Profesor* profesor)
+//        : naziv(naziv), profesor(profesor) {}
+//
+//    string getNaziv() const { return naziv; }
+//    Profesor* getProfesor() const { return profesor; }
+//
+//    void dodajStudenta(Student* student) {
+//        studenti.push_back(student);
+//    }
+//
+//    const vector<Student*>& getStudenti() const { return studenti; }
+//
+//private:
+//    string naziv;
+//    Profesor* profesor;
+//    vector<Student*> studenti;
+//};
+//
+//
+//class Univerzitet {
+//public:
+//    void dodajStudenta(const Student& student) {
+//        if (studenti.find(student.getBrIndeksa()) != studenti.end()) {
+//            throw runtime_error("Student vec postoji.");
+//        }
+//        studenti[student.getBrIndeksa()] = student;
+//    }
+//
+//    void dodajProfesora(const Profesor& profesor) {
+//        profesori.push_back(profesor);
+//    }
+//
+//    void dodajKurs(const Kurs& kurs) {
+//        kursevi.push_back(kurs);
+//    }
+//
+//    Student& nadjiStudenta(int brIndeksa) {
+//        if (studenti.find(brIndeksa) == studenti.end()) {
+//            throw runtime_error("Student nije pronadjen.");
+//        }
+//        return studenti[brIndeksa];
+//    }
+//
+//    Profesor& nadjiProfesora(const string& ime, const string& prezime) {
+//        for (Profesor& profesor : profesori) {
+//            if (profesor.getIme() == ime && profesor.getPrezime() == prezime) {
+//                return profesor;
+//            }
+//        }
+//        throw runtime_error("Profesor nije pronadjen.");
+//    }
+//
+//    Kurs& nadjiKurs(const string& naziv) {
+//        for (Kurs& kurs : kursevi) {
+//            if (kurs.getNaziv() == naziv) {
+//                return kurs;
+//            }
+//        }
+//        throw runtime_error("Kurs nije pronadjen.");
+//    }
+//
+//    void prikaziStudente() const {
+//        for (const auto& par : studenti) {
+//            cout << par.second << endl;
+//        }
+//    }
+//
+//    void prikaziProfesore() const {
+//        for (const Profesor& profesor : profesori) {
+//            cout << profesor << endl;
+//        }
+//    }
+//
+//    void prikaziKurseve() const {
+//        for (const Kurs& kurs : kursevi) {
+//            cout << "Kurs: " << kurs.getNaziv() << ", Profesor: " << *kurs.getProfesor() << endl;
+//            cout << "Studenti:" << endl;
+//            for (Student* student : kurs.getStudenti()) {
+//                cout << " - " << *student << endl;
+//            }
+//        }
+//    }
+//
+//private:
+//    map<int, Student> studenti;
+//    vector<Profesor> profesori;
+//    vector<Kurs> kursevi;
+//};
+//
+//int main() {
+//    try {
+//        Univerzitet univerzitet;
+//
+//        Profesor prof1("Marko", "Markovic", "Dr");
+//        Profesor prof2("Ana", "Anic", "Mr");
+//
+//        univerzitet.dodajProfesora(prof1);
+//        univerzitet.dodajProfesora(prof2);
+//
+//        Student stud1("Ivan", "Ivic", 123);
+//        Student stud2("Petar", "Petrovic", 124);
+//
+//        univerzitet.dodajStudenta(stud1);
+//        univerzitet.dodajStudenta(stud2);
+//
+//        Kurs kurs1("Matematika", &prof1);
+//        Kurs kurs2("Fizika", &prof2);
+//
+//        kurs1.dodajStudenta(&stud1);
+//        kurs2.dodajStudenta(&stud2);
+//
+//        univerzitet.dodajKurs(kurs1);
+//        univerzitet.dodajKurs(kurs2);
+//
+//        cout << "Studenti:" << endl;
+//        univerzitet.prikaziStudente();
+//        cout << endl;
+//
+//        cout << "Profesori:" << endl;
+//        univerzitet.prikaziProfesore();
+//        cout << endl;
+//
+//        cout << "Kursevi:" << endl;
+//        univerzitet.prikaziKurseve();
+//    } catch (const runtime_error& e) {
+//        cout << "Greska: " << e.what() << endl;
+//    }
+//
+//    return 0;
+//}
 
+#include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
+// Bazna klasa
 class Osoba {
-public:
-    Osoba(const string& ime, const string& prezime)
-        : ime(ime), prezime(prezime) {}
-    virtual ~Osoba() {}
-
-    string getIme() const { return ime; }
-    string getPrezime() const { return prezime; }
-
-    friend ostream& operator<<(ostream& os, const Osoba& o) {
-        os << o.ime << " " << o.prezime;
-        return os;
-    }
-
-private:
+protected:
     string ime;
-    string prezime;
+    int godine;
+public:
+    Osoba(string ime, int godine) : ime(ime), godine(godine) {}
+    virtual void predstaviSe() const {
+        cout << "Ja sam " << ime << " i imam " << godine << " godina." << endl;
+    }
+    virtual void radi() const {
+        cout << "Radi opšte zadatke." << endl;
+    }
 };
 
+// Izvedena klasa
 class Student : public Osoba {
-public:
-    Student(const string& ime, const string& prezime, int brIndeksa)
-        : Osoba(ime, prezime), brIndeksa(brIndeksa) {}
-
-    int getBrIndeksa() const { return brIndeksa; }
-
 private:
-    int brIndeksa;
+    string fakultet;
+public:
+    Student(string ime, int godine, string fakultet) : Osoba(ime, godine), fakultet(fakultet) {}
+    void predstaviSe() const override {
+        cout << "Ja sam student " << ime << ", studiram na fakultetu " << fakultet << " i imam " << godine << " godina." << endl;
+    }
+    void radi() const override {
+        cout << "Pohađa predavanja i uči za ispite." << endl;
+    }
 };
 
-class Profesor : public Osoba {
-public:
-    Profesor(const string& ime, const string& prezime, const string& titula)
-        : Osoba(ime, prezime), titula(titula) {}
-
-    string getTitula() const { return titula; }
-
-private:
-    string titula;
-};
-
-
-class Kurs {
-public:
-    Kurs(const string& naziv, Profesor* profesor)
-        : naziv(naziv), profesor(profesor) {}
-
-    string getNaziv() const { return naziv; }
-    Profesor* getProfesor() const { return profesor; }
-
-    void dodajStudenta(Student* student) {
-        studenti.push_back(student);
-    }
-
-    const vector<Student*>& getStudenti() const { return studenti; }
-
-private:
-    string naziv;
-    Profesor* profesor;
-    vector<Student*> studenti;
-};
-
-
-class Univerzitet {
-public:
-    void dodajStudenta(const Student& student) {
-        if (studenti.find(student.getBrIndeksa()) != studenti.end()) {
-            throw runtime_error("Student vec postoji.");
-        }
-        studenti[student.getBrIndeksa()] = student;
-    }
-
-    void dodajProfesora(const Profesor& profesor) {
-        profesori.push_back(profesor);
-    }
-
-    void dodajKurs(const Kurs& kurs) {
-        kursevi.push_back(kurs);
-    }
-
-    Student& nadjiStudenta(int brIndeksa) {
-        if (studenti.find(brIndeksa) == studenti.end()) {
-            throw runtime_error("Student nije pronadjen.");
-        }
-        return studenti[brIndeksa];
-    }
-
-    Profesor& nadjiProfesora(const string& ime, const string& prezime) {
-        for (Profesor& profesor : profesori) {
-            if (profesor.getIme() == ime && profesor.getPrezime() == prezime) {
-                return profesor;
-            }
-        }
-        throw runtime_error("Profesor nije pronadjen.");
-    }
-
-    Kurs& nadjiKurs(const string& naziv) {
-        for (Kurs& kurs : kursevi) {
-            if (kurs.getNaziv() == naziv) {
-                return kurs;
-            }
-        }
-        throw runtime_error("Kurs nije pronadjen.");
-    }
-
-    void prikaziStudente() const {
-        for (const auto& par : studenti) {
-            cout << par.second << endl;
-        }
-    }
-
-    void prikaziProfesore() const {
-        for (const Profesor& profesor : profesori) {
-            cout << profesor << endl;
-        }
-    }
-
-    void prikaziKurseve() const {
-        for (const Kurs& kurs : kursevi) {
-            cout << "Kurs: " << kurs.getNaziv() << ", Profesor: " << *kurs.getProfesor() << endl;
-            cout << "Studenti:" << endl;
-            for (Student* student : kurs.getStudenti()) {
-                cout << " - " << *student << endl;
-            }
-        }
-    }
-
-private:
-    map<int, Student> studenti;
-    vector<Profesor> profesori;
-    vector<Kurs> kursevi;
-};
+// Funkcija za demonstraciju polimorfizma
+void pozdravi(const Osoba& osoba) {
+    cout << "Pozdrav! ";
+    osoba.predstaviSe();
+    osoba.radi();
+}
 
 int main() {
-    try {
-        Univerzitet univerzitet;
+    Osoba osoba("Marko", 25);
+    Student student("Ana", 21, "ETF");
 
-        Profesor prof1("Marko", "Markovic", "Dr");
-        Profesor prof2("Ana", "Anic", "Mr");
-
-        univerzitet.dodajProfesora(prof1);
-        univerzitet.dodajProfesora(prof2);
-
-        Student stud1("Ivan", "Ivic", 123);
-        Student stud2("Petar", "Petrovic", 124);
-
-        univerzitet.dodajStudenta(stud1);
-        univerzitet.dodajStudenta(stud2);
-
-        Kurs kurs1("Matematika", &prof1);
-        Kurs kurs2("Fizika", &prof2);
-
-        kurs1.dodajStudenta(&stud1);
-        kurs2.dodajStudenta(&stud2);
-
-        univerzitet.dodajKurs(kurs1);
-        univerzitet.dodajKurs(kurs2);
-
-        cout << "Studenti:" << endl;
-        univerzitet.prikaziStudente();
-        cout << endl;
-
-        cout << "Profesori:" << endl;
-        univerzitet.prikaziProfesore();
-        cout << endl;
-
-        cout << "Kursevi:" << endl;
-        univerzitet.prikaziKurseve();
-    } catch (const runtime_error& e) {
-        cout << "Greska: " << e.what() << endl;
-    }
+    // Demonstracija polimorfizma
+    pozdravi(osoba);
+    pozdravi(student);
 
     return 0;
 }
